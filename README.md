@@ -11,10 +11,7 @@ Youll need to have:
 Python 3.10, and NodeJs installed
 
 #### Python Libaries
-* Pandas
-* Requests
-* BeautifulSoup
-* Time
+* In requirement.txt
 
 ### Backend
 * To start the flask server
