@@ -1,13 +1,18 @@
 // FlashcardsPage.js
-import React, { useState, useEffect } from 'react'; // Added useEffect
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
-import { ArrowBack, ArrowForward, Home, Brightness4, Brightness7 } from '@mui/icons-material';
+import { ArrowBack, ArrowForward, Home, Brightness4, Brightness7, Mic } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 function FlashcardsPage({ darkMode, toggleDarkMode }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [phoneticAlphabet, setPhoneticAlphabet] = useState([]);
+  const [originalAlphabet, setOriginalAlphabet] = useState([]); // New state
+  const [recordedText, setRecordedText] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [error, setError] = useState('');
+  const [flashcardColor, setFlashcardColor] = useState(''); // New state
 
   // Shuffle function
   function shuffleArray(array) {
@@ -19,9 +24,8 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
     return shuffledArray;
   }
 
-  // Load and shuffle the phonetic alphabet on component mount
   useEffect(() => {
-    const originalAlphabet = [
+    const originalAlphabetData = [
       { letter: 'A', word: 'Alpha' },
       { letter: 'B', word: 'Bravo' },
       { letter: 'C', word: 'Charlie' },
@@ -50,9 +54,56 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
       { letter: 'Z', word: 'Zulu' },
     ];
 
-    const shuffledAlphabet = shuffleArray(originalAlphabet);
+    // Store the original alphabet for comparison
+    setOriginalAlphabet(originalAlphabetData);
+
+    // Shuffle and set the phonetic alphabet
+    const shuffledAlphabet = shuffleArray(originalAlphabetData);
     setPhoneticAlphabet(shuffledAlphabet);
   }, []);
+
+  const startRecording = async () => {
+    setIsRecording(true);
+    setRecordedText('');  // Clear previous recording text
+    setFlashcardColor(''); // Reset flashcard color
+    setError('');
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/record?duration=3');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      const recognizedText = data.text.trim().toLowerCase();
+      setRecordedText(data.text);
+
+      // Get the current letter from the shuffled phoneticAlphabet
+      const currentLetter = phoneticAlphabet[currentIndex].letter;
+
+      // Find the expected word in the originalAlphabet using the currentLetter
+      const expectedEntry = originalAlphabet.find(
+        (entry) => entry.letter === currentLetter
+      );
+
+      const expectedWord = expectedEntry ? expectedEntry.word.trim().toLowerCase() : '';
+
+      // Compare the recognized text with the expected word
+      console.log('Recognized Text:', recognizedText);
+      console.log('Expected Word:', expectedWord);
+      if (recognizedText === expectedWord) {
+        // Correct answer
+        setFlashcardColor('green');
+      } else {
+        // Incorrect answer
+        setFlashcardColor('red');
+      }
+    } catch (error) {
+      console.error('Error recording:', error);
+      setError('Failed to record audio');
+    } finally {
+      setIsRecording(false);
+    }
+  };
 
   // Navigation handlers
   const handleFlip = () => setIsFlipped(!isFlipped);
@@ -63,6 +114,7 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
         prevIndex === 0 ? phoneticAlphabet.length - 1 : prevIndex - 1
       );
       setIsFlipped(false);
+      setFlashcardColor(''); // Reset flashcard color
     }
   };
 
@@ -72,6 +124,7 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
         prevIndex === phoneticAlphabet.length - 1 ? 0 : prevIndex + 1
       );
       setIsFlipped(false);
+      setFlashcardColor(''); // Reset flashcard color
     }
   };
 
@@ -105,7 +158,7 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
       {/* Flashcard Navigation and Flip */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 2 }}>
         <IconButton onClick={handlePrev} sx={{ color: darkMode ? '#FFFFFF' : '#000000' }}>
-          <ArrowBack />
+          <ArrowBack sx={{fontSize: 45}}/>
         </IconButton>
 
         {/* Flashcard Container */}
@@ -137,7 +190,7 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
                 width: '100%',
                 height: '100%',
                 backfaceVisibility: 'hidden',
-                backgroundColor: darkMode ? '#333333' : '#DDDDDD',
+                backgroundColor: flashcardColor || (darkMode ? '#333333' : '#DDDDDD'), // Use flashcardColor
                 color: darkMode ? '#FFFFFF' : '#000000',
                 display: 'flex',
                 alignItems: 'center',
@@ -157,7 +210,7 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
                 width: '100%',
                 height: '100%',
                 backfaceVisibility: 'hidden',
-                backgroundColor: darkMode ? '#1E1E1E' : '#EEEEEE',
+                backgroundColor: flashcardColor || (darkMode ? '#1E1E1E' : '#EEEEEE'), // Use flashcardColor
                 color: darkMode ? '#FFD700' : '#000000',
                 display: 'flex',
                 alignItems: 'center',
@@ -174,9 +227,28 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
         </Box>
 
         <IconButton onClick={handleNext} sx={{ color: darkMode ? '#FFFFFF' : '#000000' }}>
-          <ArrowForward />
+          <ArrowForward sx={{fontSize: 45}}/>
         </IconButton>
       </Box>
+
+      {/* Microphone Button */}
+      <IconButton sx={{ margin: 3 }} onClick={startRecording} disabled={isRecording}>
+        <Mic sx={{ fontSize: 45, color: isRecording ? 'gray' : darkMode ? '#FFFFFF' : '#000000' }} />
+      </IconButton>
+
+      {/* Display the recognized text */}
+      {recordedText && (
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          You said: {recordedText}
+        </Typography>
+      )}
+
+      {/* Display any errors */}
+      {error && (
+        <Typography color="error" variant="body1" sx={{ mt: 2 }}>
+          {error}
+        </Typography>
+      )}
     </Box>
   );
 }

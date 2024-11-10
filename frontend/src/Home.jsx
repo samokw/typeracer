@@ -22,7 +22,7 @@ function Home({ darkMode, toggleDarkMode }) {
       </IconButton>
 
       <Typography variant="h1" gutterBottom>
-        Welcome to Alphanetic Typeracer
+        Welcome to Alphanetic
       </Typography>
       <Typography variant="h5" gutterBottom>
         Learn Your Phonetic Alphabet

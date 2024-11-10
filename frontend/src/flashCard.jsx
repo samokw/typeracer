@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Card, CardContent } from '@mui/material';
+import { Typography, Card, CardContent } from '@mui/material';
 
 function Flashcard({ letter, word }) {
   const [showWord, setShowWord] = useState(false);

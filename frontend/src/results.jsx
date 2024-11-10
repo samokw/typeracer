@@ -1,25 +1,14 @@
+// results.js
 import React from 'react';
-import { Typography, Button, Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
-function Results({ wpm }) {
-  const handleRestart = () => {
-    window.location.reload(); // Simple way to restart the game
-  };
-
+function Results({ accuracy, timeTaken, children }) {
   return (
-    <Box sx={{ mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Race Finished!
-      </Typography>
-      <Typography variant="h6">Your WPM: {wpm}</Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleRestart}
-        sx={{ mt: 2 }}
-      >
-        Restart
-      </Button>
+    <Box sx={{ textAlign: 'center', mt: 4 }}>
+      <Typography variant="h4">Results:</Typography>
+      <Typography variant="h4">Accuracy: {accuracy}%</Typography>
+      <Typography variant="h4">Time Taken: {timeTaken} seconds</Typography>
+      {children}
     </Box>
   );
 }
