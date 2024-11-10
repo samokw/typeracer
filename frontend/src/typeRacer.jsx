@@ -207,7 +207,7 @@ function TypeRacer({ darkMode, toggleDarkMode }) {
         sx={{ fontSize: '3.2em', lineHeight: '2' }}
         gutterBottom
       >
-        Alphanetic Typeracer
+        Alphanetic
       </Typography>
 
       {!hasStarted ? (
