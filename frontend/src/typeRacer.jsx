@@ -228,7 +228,7 @@ function TypeRacer({ darkMode, toggleDarkMode }) {
         <Button
           onClick={handleStart}
           variant="contained"
-          color="primary"
+          color="inherit"
           sx={{
             marginTop: 2,
             padding: '0.8em 2em',

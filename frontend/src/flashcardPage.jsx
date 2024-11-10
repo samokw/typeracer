@@ -151,8 +151,8 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
       </IconButton>
 
       {/* Flashcard Header */}
-      <Typography variant="h2" gutterBottom>
-        Flashcards
+      <Typography variant="h5" gutterBottom>
+        Try to pronounce the word on the flashcard
       </Typography>
 
       {/* Flashcard Navigation and Flip */}
@@ -235,13 +235,6 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
       <IconButton sx={{ margin: 3 }} onClick={startRecording} disabled={isRecording}>
         <Mic sx={{ fontSize: 45, color: isRecording ? 'gray' : darkMode ? '#FFFFFF' : '#000000' }} />
       </IconButton>
-
-      {/* Display the recognized text */}
-      {recordedText && (
-        <Typography variant="h6" sx={{ mt: 2 }}>
-          You said: {recordedText}
-        </Typography>
-      )}
 
       {/* Display any errors */}
       {error && (

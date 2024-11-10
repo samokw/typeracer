@@ -21,21 +21,21 @@ function Home({ darkMode, toggleDarkMode }) {
         {darkMode ? <Brightness7 sx={{ fontSize: 60 }} /> : <Brightness4 sx={{ fontSize: 60 }} />}
       </IconButton>
 
-      <Typography variant="h1" gutterBottom>
+      <Typography variant="h1" gutterBottom sx={{marginTop: 4}}>
         Welcome to Alphanetic
       </Typography>
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h5" gutterBottom sx={{marginTop: 4}}>
         Learn Your Phonetic Alphabet
       </Typography>
-      <Button variant="contained" color="inherit" component={Link} to="/typeracer" sx={{ marginTop: 2 }}>
-        Start Typing Race to practice your Memorization
-      </Button>
-      <Button variant="contained" color="inherit" component={Link} to="/flashcards" sx={{ marginTop: 2 }}>
-        Flashcards to Practice your Phonetic Alphabet
-      </Button>
-      <Button variant="contained" color="inherit" component={Link} to="/alphabet" sx={{ marginTop: 2 }}>
+      <Button variant="contained" color="inherit" component={Link} to="/alphabet" sx={{ marginTop: 4 }}>
         Phonetic Alphabet Table
-        </Button>
+      </Button>
+      <Button variant="contained" color="inherit" component={Link} to="/flashcards" sx={{ marginTop: 4 }}>
+        Flashcards for Vocal Practice of your Phonetic Alphabet
+      </Button>
+      <Button variant="contained" color="inherit" component={Link} to="/typeracer" sx={{ marginTop: 4 }}>
+        Start Typing Race to Practice your Memorization
+      </Button>
     </Box>
   );
 }
