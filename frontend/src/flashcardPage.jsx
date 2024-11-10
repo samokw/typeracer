@@ -1,4 +1,3 @@
-// FlashcardsPage.js
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
 import { ArrowBack, ArrowForward, Home, Brightness4, Brightness7, Mic } from '@mui/icons-material';
@@ -8,18 +7,17 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [phoneticAlphabet, setPhoneticAlphabet] = useState([]);
-  const [originalAlphabet, setOriginalAlphabet] = useState([]); // New state
+  const [originalAlphabet, setOriginalAlphabet] = useState([]);
   const [recordedText, setRecordedText] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [error, setError] = useState('');
-  const [flashcardColor, setFlashcardColor] = useState(''); // New state
+  const [flashcardColor, setFlashcardColor] = useState('');
 
-  // Shuffle function
   function shuffleArray(array) {
-    const shuffledArray = [...array]; // Make a copy to avoid mutating the original array
+    const shuffledArray = [...array];
     for (let i = shuffledArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1)); // Random index from 0 to i
-      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; // Swap elements
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
     }
     return shuffledArray;
   }
@@ -54,18 +52,16 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
       { letter: 'Z', word: 'Zulu' },
     ];
 
-    // Store the original alphabet for comparison
     setOriginalAlphabet(originalAlphabetData);
 
-    // Shuffle and set the phonetic alphabet
     const shuffledAlphabet = shuffleArray(originalAlphabetData);
     setPhoneticAlphabet(shuffledAlphabet);
   }, []);
 
   const startRecording = async () => {
     setIsRecording(true);
-    setRecordedText('');  // Clear previous recording text
-    setFlashcardColor(''); // Reset flashcard color
+    setRecordedText(''); 
+    setFlashcardColor('');
     setError('');
 
     try {
@@ -77,35 +73,26 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
       const recognizedText = data.text.trim().toLowerCase();
       setRecordedText(data.text);
 
-      // Get the current letter from the shuffled phoneticAlphabet
       const currentLetter = phoneticAlphabet[currentIndex].letter;
 
-      // Find the expected word in the originalAlphabet using the currentLetter
       const expectedEntry = originalAlphabet.find(
         (entry) => entry.letter === currentLetter
       );
 
       const expectedWord = expectedEntry ? expectedEntry.word.trim().toLowerCase() : '';
 
-      // Compare the recognized text with the expected word
-      console.log('Recognized Text:', recognizedText);
-      console.log('Expected Word:', expectedWord);
       if (recognizedText === expectedWord) {
-        // Correct answer
         setFlashcardColor('green');
       } else {
-        // Incorrect answer
         setFlashcardColor('red');
       }
     } catch (error) {
-      console.error('Error recording:', error);
       setError('Failed to record audio');
     } finally {
       setIsRecording(false);
     }
   };
 
-  // Navigation handlers
   const handleFlip = () => setIsFlipped(!isFlipped);
 
   const handlePrev = () => {
@@ -114,7 +101,7 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
         prevIndex === 0 ? phoneticAlphabet.length - 1 : prevIndex - 1
       );
       setIsFlipped(false);
-      setFlashcardColor(''); // Reset flashcard color
+      setFlashcardColor('');
     }
   };
 
@@ -124,7 +111,7 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
         prevIndex === phoneticAlphabet.length - 1 ? 0 : prevIndex + 1
       );
       setIsFlipped(false);
-      setFlashcardColor(''); // Reset flashcard color
+      setFlashcardColor('');
     }
   };
 
@@ -140,28 +127,23 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
         color: darkMode ? '#FFFFFF' : '#000000',
       }}
     >
-      {/* Home Icon */}
       <IconButton component={Link} to="/" color="inherit" sx={{ position: 'absolute', top: 16, left: 16 }}>
         <Home sx={{ fontSize: 60 }} />
       </IconButton>
 
-      {/* Dark Mode Toggle */}
       <IconButton onClick={toggleDarkMode} color="inherit" sx={{ position: 'absolute', top: 16, right: 16 }}>
         {darkMode ? <Brightness7 sx={{ fontSize: 60 }} /> : <Brightness4 sx={{ fontSize: 60 }} />}
       </IconButton>
 
-      {/* Flashcard Header */}
       <Typography variant="h5" gutterBottom>
         Try to pronounce the word on the flashcard
       </Typography>
 
-      {/* Flashcard Navigation and Flip */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 2 }}>
         <IconButton onClick={handlePrev} sx={{ color: darkMode ? '#FFFFFF' : '#000000' }}>
           <ArrowBack sx={{fontSize: 45}}/>
         </IconButton>
 
-        {/* Flashcard Container */}
         <Box
           onClick={handleFlip}
           sx={{
@@ -183,14 +165,13 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
               transform: isFlipped ? 'rotateY(180deg)' : 'none',
             }}
           >
-            {/* Front of the Card */}
             <Box
               sx={{
                 position: 'absolute',
                 width: '100%',
                 height: '100%',
                 backfaceVisibility: 'hidden',
-                backgroundColor: flashcardColor || (darkMode ? '#333333' : '#DDDDDD'), // Use flashcardColor
+                backgroundColor: flashcardColor || (darkMode ? '#333333' : '#DDDDDD'),
                 color: darkMode ? '#FFFFFF' : '#000000',
                 display: 'flex',
                 alignItems: 'center',
@@ -203,14 +184,13 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
               {phoneticAlphabet.length > 0 && phoneticAlphabet[currentIndex].letter}
             </Box>
 
-            {/* Back of the Card */}
             <Box
               sx={{
                 position: 'absolute',
                 width: '100%',
                 height: '100%',
                 backfaceVisibility: 'hidden',
-                backgroundColor: flashcardColor || (darkMode ? '#1E1E1E' : '#EEEEEE'), // Use flashcardColor
+                backgroundColor: flashcardColor || (darkMode ? '#1E1E1E' : '#EEEEEE'),
                 color: darkMode ? '#FFD700' : '#000000',
                 display: 'flex',
                 alignItems: 'center',
@@ -231,12 +211,9 @@ function FlashcardsPage({ darkMode, toggleDarkMode }) {
         </IconButton>
       </Box>
 
-      {/* Microphone Button */}
       <IconButton sx={{ margin: 3 }} onClick={startRecording} disabled={isRecording}>
         <Mic sx={{ fontSize: 45, color: isRecording ? 'gray' : darkMode ? '#FFFFFF' : '#000000' }} />
       </IconButton>
-
-      {/* Display any errors */}
       {error && (
         <Typography color="error" variant="body1" sx={{ mt: 2 }}>
           {error}

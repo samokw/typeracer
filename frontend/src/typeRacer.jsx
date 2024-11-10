@@ -12,7 +12,7 @@ function TypeRacer({ darkMode, toggleDarkMode }) {
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [userInput, setUserInput] = useState('');
   const [startTime, setStartTime] = useState(null);
-  const [hasStarted, setHasStarted] = useState(false); // New state variable
+  const [hasStarted, setHasStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [accuracy, setAccuracy] = useState(0);
   const [timeTaken, setTimeTaken] = useState(0);
@@ -38,13 +38,13 @@ function TypeRacer({ darkMode, toggleDarkMode }) {
 
   const calculateResults = () => {
     const endTime = new Date();
-    const timeDiff = (endTime - startTime) / 1000; // Time in seconds
-    const totalLetters = quote.replace(/\s/g, '').length; // Total non-space letters
+    const timeDiff = (endTime - startTime) / 1000;
+    const totalLetters = quote.replace(/\s/g, '').length;
     const correctLetters = inputStatus.filter((status) => status === 'correct').length;
-    const accuracy = ((correctLetters / totalLetters) * 100).toFixed(2); // Percentage
+    const accuracy = ((correctLetters / totalLetters) * 100).toFixed(2);
     console.log(inputStatus);
     setAccuracy(accuracy);
-    setTimeTaken(timeDiff.toFixed(2)); // in seconds
+    setTimeTaken(timeDiff.toFixed(2));
     console.log('Correct Letters:', correctLetters);
     console.log('Total Letters:', totalLetters);
   };
@@ -77,15 +77,12 @@ function TypeRacer({ darkMode, toggleDarkMode }) {
 
     let index = currentLetterIndex - 1;
 
-    // Skip over spaces
     while (index > 0 && quote[index] === ' ') {
       index--;
     }
 
-    // Clone the current input status
     let newStatus = [...inputStatus];
 
-    // Reset the status of the character we're moving back to
     newStatus[index] = undefined;
 
     setInputStatus(newStatus);
@@ -95,21 +92,18 @@ function TypeRacer({ darkMode, toggleDarkMode }) {
   };
 
   const checkInput = () => {
-    if (!quote) return; // Ensure quote is loaded
+    if (!quote) return;
 
     let index = currentLetterIndex;
 
-    // Skip spaces at the current position
     while (index < quote.length && quote[index] === ' ') {
       index++;
     }
 
-    // Process the character at index
     if (index < quote.length) {
       let currentChar = quote[index];
       const currentLetter = currentChar.toUpperCase();
 
-      // Find the phonetic word from the phoneticAlphabet array
       const phoneticEntry = phoneticAlphabet.find(
         (entry) => entry.letter === currentLetter
       );
@@ -118,36 +112,28 @@ function TypeRacer({ darkMode, toggleDarkMode }) {
       let newStatus = [...inputStatus];
 
       if (userInput.trim().toLowerCase() === expectedWord.toLowerCase()) {
-        // Correct input
         newStatus[index] = 'correct';
         setErrorMessage('');
       } else {
-        // Incorrect input
         newStatus[index] = 'incorrect';
       }
 
       setInputStatus(newStatus);
 
-      // Move to next character
       index++;
 
-      // Skip spaces at the next position
       while (index < quote.length && quote[index] === ' ') {
         index++;
       }
 
       setUserInput('');
-
-      // Check if we have reached the end after moving to the next character
       if (index > quote.length) {
-        // Finished all characters
         calculateResults();
         setIsFinished(true);
       } else {
         setCurrentLetterIndex(index);
       }
     } else {
-      // If index is already beyond the quote length, finish the game
       calculateResults();
       setIsFinished(true);
     }
@@ -165,7 +151,7 @@ function TypeRacer({ darkMode, toggleDarkMode }) {
     setCurrentLetterIndex(0);
     setErrorMessage('');
     setInputStatus([]);
-    fetchQuote(); // Fetch a new quote if desired
+    fetchQuote();
     if (typingAreaRef.current) {
       typingAreaRef.current.focus();
     }

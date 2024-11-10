@@ -8,18 +8,14 @@ import FlashcardsPage from './flashcardPage';
 import PhoneticAlphabetTable from './PhoneticAlphabetTable';
 
 function App() {
-  // Set initial dark mode based on localStorage or default to light mode
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
 
-  // Toggle dark mode and save preference to localStorage
   const toggleDarkMode = () => {
     setDarkMode((prevMode) => {
       localStorage.setItem('darkMode', !prevMode);
       return !prevMode;
     });
   };
-
-  // Define the theme based on darkMode state
   const theme = createTheme({
     palette: {
       mode: darkMode ? 'dark' : 'light',

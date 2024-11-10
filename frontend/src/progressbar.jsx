@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, LinearProgress } from '@mui/material';
-import { color } from 'chart.js/helpers';
 
 function ProgressBar({ progress }) {
   return (

@@ -2,23 +2,21 @@ import React from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 function TextDisplay({ text, currentLetterIndex, inputStatus }) {
-  const theme = useTheme(); // Access the theme object
+  const theme = useTheme();
 
   const renderText = () => {
     const textArray = text.split('');
     return textArray.map((char, index) => {
       const isCurrentLetter = index === currentLetterIndex;
       const isSpace = char === ' ';
-
-      // Determine the color based on the input status and theme
       let color;
       if (index < inputStatus.length) {
         color =
           inputStatus[index] === 'correct'
-            ? theme.palette.success.main // Theme's success color
-            : theme.palette.error.main;  // Theme's error color
+            ? theme.palette.success.main 
+            : theme.palette.error.main;
       } else {
-        color = theme.palette.text.primary; // Theme's primary text color
+        color = theme.palette.text.primary;
       }
 
       return (

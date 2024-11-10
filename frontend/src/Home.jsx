@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Box, Typography, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
-import HomeIcon from '@mui/icons-material/Home';
 
 function Home({ darkMode, toggleDarkMode }) {
   return (

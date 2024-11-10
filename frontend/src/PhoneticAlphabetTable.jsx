@@ -45,7 +45,6 @@ const phoneticAlphabet = [
 ];
 
 function PhoneticAlphabetTable({ darkMode, toggleDarkMode }) {
-  // Split the alphabet into two halves
   const midIndex = Math.ceil(phoneticAlphabet.length / 2);
   const firstHalf = phoneticAlphabet.slice(0, midIndex);
   const secondHalf = phoneticAlphabet.slice(midIndex);
@@ -58,7 +57,6 @@ function PhoneticAlphabetTable({ darkMode, toggleDarkMode }) {
         padding: 3,
       }}
     >
-      {/* Home Icon */}
       <IconButton
         component={Link}
         to="/"
@@ -68,7 +66,6 @@ function PhoneticAlphabetTable({ darkMode, toggleDarkMode }) {
         <Home sx={{ fontSize: 60 }} />
       </IconButton>
 
-      {/* Dark Mode Toggle */}
       <IconButton
         onClick={toggleDarkMode}
         color="inherit"
@@ -81,7 +78,6 @@ function PhoneticAlphabetTable({ darkMode, toggleDarkMode }) {
         )}
       </IconButton>
 
-      {/* Page Title */}
       <Typography
         variant="h1"
         align="center"
